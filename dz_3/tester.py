@@ -30,6 +30,7 @@ def run_tests(file_path="inputs.txt"):
 
         start_time = time.perf_counter()
         result_status = ""
+        execution_time = 0.0
 
         try:
             process = subprocess.run(
@@ -48,7 +49,8 @@ def run_tests(file_path="inputs.txt"):
                 output = process.stdout.strip()
 
                 if output:
-                    actual_result = output.split()[-1]
+                    all_numbers = re.findall(r'-?\d+', output)
+                    actual_result = all_numbers[-1] if all_numbers else output.split()[-1]
                 else:
                     actual_result = ""
 
@@ -58,7 +60,7 @@ def run_tests(file_path="inputs.txt"):
                     result_status = "Wrong Answer"
 
         except subprocess.TimeoutExpired:
-            execution_time = time.perf_counter() - start_time
+            execution_time = 1.000
             result_status = "Time Limit Exceeded"
         except Exception:
             execution_time = time.perf_counter() - start_time
